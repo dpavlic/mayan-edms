@@ -14,6 +14,12 @@
         {% block web_theme_head %}{% endblock %}	
 
 		{% compress css %}
+
+        <!-- BOOTSTRAP FILES -->
+        <link rel="stylesheet" href="{{ STATIC_URL }}bootstrap/css/bootstrap.min.css" type="text/css" media="screen" />
+        <link rel="stylesheet" href="{{ STATIC_URL }}bootstrap/css/main.css" type="text/css" media="screen" />
+
+        <!-- WEB THEME FILES -->
         <link rel="stylesheet" href="{{ STATIC_URL }}web_theme_media/stylesheets/base.css" type="text/css" media="screen" />
         <link rel="stylesheet" id="current-theme" href="{{ STATIC_URL }}web_theme_media/stylesheets/themes/{{ web_theme|default:'activo' }}/style.css" type="text/css" media="screen" />
         <style type="text/css">
@@ -33,7 +39,9 @@
                 text-decoration:none;
                 font-weight:bold
             }
-        </style>
+        </style> 
+        
+
         <link rel="stylesheet" href="{{ STATIC_URL }}packages/animate-custom.css" type="text/css" media="screen" />
         {% block web_theme_stylesheets %}{% endblock %}
 		{% endcompress %}
@@ -68,28 +76,39 @@
         {% endcompress %}
 	</head>
 	<body>
-        <div id="container">
+               <div id="container">
             {% if web_theme_view_type == 'plain' %}
                 <div id="box">
                     {% block content_plain %}{% endblock %}
                 </div>
             {% else %}
-                {% if not web_theme_hide_menus %}
-                    <div id="header">
-                        <h1><a href="{% url 'home' %}">{% block web_theme_project_name %}{% endblock %}</a></h1>
-                        <div id="main-navigation">
-                            <ul class="wat-cf" style="width: 73%;">
-                                {% block web_theme_main_navigation %}{% endblock %}
-                            </ul>
-                        </div>
-                        <div id="user-navigation">
-                            <ul class="wat-cf">
-                                {% block web_theme_user_navigation %}{% endblock %}
-                            </ul>
-                        </div>
+            {% if not web_theme_hide_menus %}
+
+            <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                       <a class="navbar-brand" href="{% url 'home' %}"><img src="{{ STATIC_URL }}images/logo.png" width="10%" heigth="10%"/>&nbsp;{% block web_theme_project_name %}{% endblock %}</a>
                     </div>
-                {% endif %}
-                <div id="wrapper" class="wat-cf">
+                    <div class="navbar-collapse collapse">
+                        <ul class="nav navbar-nav navbar-right">
+                             {% block web_theme_user_navigation %}{% endblock %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-sm-3 col-md-2 sidebar">
+                        <ul class="nav nav-sidebar">
+                            {% block web_theme_main_navigation %}{% endblock %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            {% endif %}
+                <div id="wrapper" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
                     <div id="main">
                         {% if messages %}
                             <div class="inner">
