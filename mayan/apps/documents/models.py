@@ -175,7 +175,8 @@ class Document(models.Model):
     def size(self):
         return self.latest_version.size
 
-    def new_version(self, file, user=None, comment=None, version_update=None, release_level=None, serial=None):
+    def new_version(self, file, user=None, comment=None, version_update=None,
+            release_level=None, serial=None, timestamp=None):
         logger.debug('creating new document version')
         if not self.is_new_versions_allowed(user=user):
             raise NewDocumentVersionNotAllowed
@@ -192,6 +193,7 @@ class Document(models.Model):
                 release_level=release_level,
                 serial=serial,
                 comment=comment,
+                timestamp=timestamp,
             )
             new_version.save()
         else:
@@ -199,6 +201,7 @@ class Document(models.Model):
             new_version = DocumentVersion(
                 document=self,
                 file=file,
+                timestamp=timestamp,
             )
             new_version.save()
 
@@ -375,7 +378,10 @@ class DocumentVersion(models.Model):
         """
         new_document = not self.pk
         if not self.pk:
-            self.timestamp = now()
+            try:
+                self.timestamp = self.timestamp
+            except:
+                self.timestamp = datetime.datetime.now
 
         # Only do this for new documents
         transformations = kwargs.pop('transformations', None)

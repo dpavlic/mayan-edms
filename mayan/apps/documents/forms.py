@@ -1,5 +1,7 @@
 from __future__ import absolute_import
 
+import datetime
+
 from django import forms
 from django.utils.encoding import force_unicode
 from django.utils.html import conditional_escape
@@ -163,6 +165,12 @@ class DocumentForm(forms.ModelForm):
             widget=forms.widgets.Textarea(attrs={'rows': 4}),
         )
 
+
+    timestamp = forms.DateTimeField(
+        label=_(u'Date and Time'),
+        initial=datetime.datetime.now,
+    )
+
     new_filename = forms.CharField(
         label=_('New document filename'), required=False
     )
@@ -174,6 +182,7 @@ class DocumentForm(forms.ModelForm):
             'version_update': self.cleaned_data.get('version_update'),
             'release_level': self.cleaned_data.get('release_level'),
             'serial': self.cleaned_data.get('serial'),
+            'timestamp': self.cleaned_data.get('timestamp'),
         }
 
         # Always return the full collection of cleaned data.
@@ -199,6 +208,7 @@ class DocumentForm_edit(DocumentForm):
             self.fields.pop('new_filename')
 
         self.fields.pop('use_file_name')
+        self.fields.pop('timestamp')
 
 
 class DocumentPropertiesForm(DetailForm):
