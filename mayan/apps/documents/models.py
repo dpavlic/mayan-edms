@@ -194,6 +194,7 @@ class Document(models.Model):
                 serial=serial,
                 comment=comment,
                 timestamp=timestamp,
+                user=user,
             )
             new_version.save()
         else:
@@ -202,6 +203,7 @@ class Document(models.Model):
                 document=self,
                 file=file,
                 timestamp=timestamp,
+                user=user,
             )
             new_version.save()
 
@@ -321,6 +323,7 @@ class DocumentVersion(models.Model):
     serial = models.PositiveIntegerField(verbose_name=_(u'serial'), default=0)
     timestamp = models.DateTimeField(verbose_name=_(u'timestamp'), editable=True, db_index=True)
     comment = models.TextField(blank=True, verbose_name=_(u'comment'))
+    user = models.ForeignKey(User, verbose_name=_(u'user'), editable=True)
 
     # File related fields
     file = models.FileField(upload_to=get_filename_from_uuid, storage=storage_backend, verbose_name=_(u'file'))
@@ -330,7 +333,7 @@ class DocumentVersion(models.Model):
     checksum = models.TextField(blank=True, null=True, verbose_name=_(u'checksum'), editable=False)
 
     class Meta:
-        unique_together = ('document', 'major', 'minor', 'micro', 'release_level', 'serial')
+        unique_together = ('document', 'major', 'minor', 'micro', 'release_level', 'serial', 'user')
         verbose_name = _(u'document version')
         verbose_name_plural = _(u'document version')
 
