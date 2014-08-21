@@ -346,7 +346,8 @@ def document_download(request, document_id=None, document_id_list=None, document
                     return serve_file(
                         request,
                         document_versions[0].file,
-                        save_as=u'"%s"' % document_versions[0].filename,
+                        save_as=u'"%s"' % (document_versions[0].timestamp.strftime('%Y-%m-%d_%Hh-%M_')
+                            + str(document_versions[0].user) + '_' + document_versions[0].filename),
                         content_type=document_versions[0].mimetype if document_versions[0].mimetype else 'application/octet-stream'
                     )
                 except Exception as exception:
