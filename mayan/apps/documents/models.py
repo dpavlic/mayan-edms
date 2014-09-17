@@ -327,7 +327,7 @@ class DocumentVersion(models.Model):
 
     # File related fields
     file = models.FileField(upload_to=get_filename_from_uuid, storage=storage_backend, verbose_name=_(u'file'))
-    mimetype = models.CharField(max_length=255, null=True, blank=True, editable=False)
+    mimetype = models.CharField(max_length=255, null=True, blank=True, editable=True)
     encoding = models.CharField(max_length=64, null=True, blank=True, editable=False)
     filename = models.CharField(max_length=255, default=u'', editable=True, db_index=True)
     checksum = models.TextField(blank=True, null=True, verbose_name=_(u'checksum'), editable=False)
