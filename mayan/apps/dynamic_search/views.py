@@ -38,7 +38,14 @@ def results(request, extra_context=None):
         else:
             # Advanced search
             logger.debug('advanced search')
-            model_list, flat_list, shown_result_count, result_count, elapsed_time = document_search.advanced_search(request.GET)
+
+            ad_request = request.GET.copy()
+            try:
+                ad_request.pop('page')
+            except:
+                pass
+
+            model_list, flat_list, shown_result_count, result_count, elapsed_time = document_search.advanced_search(ad_request)
 
         if shown_result_count != result_count:
             title = _(u'results, (showing only %(shown_result_count)s out of %(result_count)s)') % {
