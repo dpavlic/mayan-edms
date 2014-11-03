@@ -54,6 +54,8 @@ from .permissions import (PERMISSION_DOCUMENT_PROPERTIES_EDIT,
                           PERMISSION_DOCUMENT_TYPE_VIEW)
 from .runtime import storage_backend
 
+from os.path import splitext
+
 logger = logging.getLogger(__name__)
 
 
@@ -347,9 +349,11 @@ def document_download(request, document_id=None, document_id_list=None, document
                     return serve_file(
                         request,
                         document_versions[0].file,
-                        save_as=u'"%s"' % (document_versions[0].timestamp.astimezone(pytz.timezone('America/New_York')).strftime('%Y-%m-%d_%Hh-%M_')
-                            + str(document_versions[0].user) + '_' + document_versions[0].filename), 
-                        content_type=document_versions[0].mimetype if document_versions[0].mimetype else 'application/octet-stream'
+                        save_as=u'"%s"' % (splitext(document_versions[0].filename)[0] + '_' +
+                            document_versions[0].timestamp.astimezone(pytz.timezone('America/New_York')).strftime('%Y-%m-%d_%Hh-%M_')
+                            + '(' + str(document_versions[0].user)[0:2].upper()
+                            + ')' + splitext(document_versions[0].filename)[1]),
+                            content_type=document_versions[0].mimetype if document_versions[0].mimetype else 'application/octet-stream'
                     )
                 except Exception as exception:
                     if settings.DEBUG:
