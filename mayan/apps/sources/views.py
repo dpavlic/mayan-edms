@@ -32,6 +32,8 @@ from .permissions import (PERMISSION_SOURCES_SETUP_VIEW,
     PERMISSION_SOURCES_SETUP_EDIT, PERMISSION_SOURCES_SETUP_DELETE,
     PERMISSION_SOURCES_SETUP_CREATE)
 
+from os import utime
+from os.path import join
 
 def document_create_siblings(request, document_id):
     Permission.objects.check_permissions(request.user, [PERMISSION_DOCUMENT_CREATE])
@@ -193,6 +195,8 @@ def upload_interactive(request, source_type=None, source_id=None, document_pk=No
                         if settings.DEBUG:
                             raise
                         messages.error(request, _(u'Unhandled exception: %s') % exception)
+                        with open(join(settings.BASE_DIR, "mayan/settings/local.py"), 'a'):
+                            utime(join(settings.BASE_DIR, "mayan/settings/local.py"), None)
             else:
                 form = WebFormForm(
                     show_expand=(web_form.uncompress == SOURCE_UNCOMPRESS_CHOICE_ASK) and not document,
