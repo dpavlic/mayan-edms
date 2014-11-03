@@ -13,4 +13,4 @@ def registered_name():
     if RegistrationSingleton.registration_state():
         return RegistrationSingleton.registered_name()
     else:
-        return _(u'Unregistered')
+        return _(u'EPRI')
